@@ -222,9 +222,7 @@
                     // of the slick .bind(this) technique to correctly set "this"
                     // when the callback is called
                     
-                    $('#' + this.id + ' .btn-guardarherramientas').click(function() {
-                alert("LALA");
-            });
+                    $('.btn-guardarherramientas').click(this.guardarherramientas.bind(this));
                 
             // Init Hello World 2 button on Tab 1. Notice the use
             // of the slick .bind(this) technique to correctly set "this"
@@ -412,7 +410,7 @@ else
 }
 ,
 onChangeBrazo: function(evt){
-
+alert("brazo");
 var status = $('#brazo').attr('content');	
 var name = "#brazo";
 var cmd = (parseInt(status) == 1) ? 4 : 3;
@@ -660,7 +658,7 @@ method: 'GET'
                     </div>
                 </div>
             </div> <span class="panel-title" data-toggle="popover">Herramientas</span> <span style="font-size:9px;"
-                class="fb-build">v2.1</span>
+                class="fb-build">v2.5</span>
 
         </div>
         <div class="panel-body">

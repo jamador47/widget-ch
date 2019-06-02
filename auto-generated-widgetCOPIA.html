@@ -258,9 +258,7 @@ cpdefine("inline:com-chilipeppr-widget-ch", ["chilipeppr_ready", /* other depend
                 );
             });
 
-            $('.btn-guardarherramientas').click(function() {
-                alert("LALA");
-            });
+            $('.btn-guardarherramientas').click(this.guardarherramientas.bind(this));
                 
             // Init Hello World 2 button on Tab 1. Notice the use
             // of the slick .bind(this) technique to correctly set "this"
@@ -444,7 +442,7 @@ cpdefine("inline:com-chilipeppr-widget-ch", ["chilipeppr_ready", /* other depend
         }
         ,
         onChangeBrazo: function(evt){
-         
+         alert("funciona");
             var status = $('#brazo').attr('content');	
             var name = "#brazo";
             var cmd = (parseInt(status) == 1) ? 4 : 3;
