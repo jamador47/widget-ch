@@ -274,12 +274,10 @@ cpdefine("inline:com-chilipeppr-widget-ch", ["chilipeppr_ready", /* other depend
              $('#husillo').click(this.onChangeHusillo.bind(this));
         },
 
-        guardarherramientas: function(){
+        guardarherramientas: function(evt){
 
             alert("LALA");
-
             var url = "http://localhost:8080/actualizarh/";
-
             url = url.concat(document.getElementById("herramientah1").value);
             url = url.concat("&");
             url = url.concat(document.getElementById("longitudh1").value);
@@ -676,7 +674,7 @@ cpdefine("inline:com-chilipeppr-widget-ch", ["chilipeppr_ready", /* other depend
                         <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">Herramientas</span> <span style="font-size:9px;" class="fb-build">v8A</span>
+            </div> <span class="panel-title" data-toggle="popover">Herramientas</span> <span style="font-size:9px;" class="fb-build">v9A</span>
 
         </div>
 
