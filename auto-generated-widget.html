@@ -339,7 +339,7 @@ url = url.concat(document.getElementById("diametroh18").value);
 url = url.concat("/");
 url = url.concat(document.getElementById("modoh").checked);
 
-
+alert(url);
 var HttpClient = function () {
               this.get = function (aUrl, aCallback) {
                                 var anHttpRequest = new XMLHttpRequest();
@@ -358,6 +358,8 @@ var client = new HttpClient();
                         });
 
             });
+
+                
 
 
 
@@ -472,8 +474,8 @@ var client = new HttpClient();
              $('#brazo').click(this.onChangeBrazo.bind(this));
              $('#carusel').click(this.onChangeCarusel.bind(this));
              $('#husillo').click(this.onChangeHusillo.bind(this));
-
                 },
+              
                 /**
                  * onHelloBtnClick is an example of a button click event callback
                  */
@@ -777,7 +779,7 @@ method: 'GET'
                     </div>
                 </div>
             </div> <span class="panel-title" data-toggle="popover">Herramientas</span> <span style="font-size:9px;"
-                class="fb-build">v7.5</span>
+                class="fb-build">v8.5</span>
 
         </div>
         <div class="panel-body">
