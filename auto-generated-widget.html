@@ -339,7 +339,6 @@ url = url.concat(document.getElementById("diametroh18").value);
 url = url.concat("/");
 url = url.concat(document.getElementById("modoh").checked);
 
-alert(url);
 var HttpClient = function () {
               this.get = function (aUrl, aCallback) {
                                 var anHttpRequest = new XMLHttpRequest();
@@ -809,10 +808,13 @@ method: 'GET'
                     <button type="button" class="btn btn-xs btn-default btn-cargarherramientas"
                     style="margin: 4px 0; background-color: yellow " id="cargarherramientas">CARGAR OPCIONES DE HERRAMIENTAS</button>
                     <br>
+                    <br>
+                    <br>
                     <input type="checkbox" id="modoh" value="1"> Modo Seguir Herramienta <br>
                     <div class="" style="text-align:center">
                         <b>Tabla de Herramientas</b>
                     </div>
+                    <br>
 
                     <table style="width:100%">
                         <tr>
