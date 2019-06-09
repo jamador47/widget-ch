@@ -165,9 +165,62 @@
                     this.setupUiFromLocalStorage();
                     this.btnSetup();
                     this.forkSetup();
+                    this.setupSubscribe();
+
 
                     console.log("I am done being initted.");
                 },
+
+                onRecvData: function(data) { // RECIBIENDO DATOS DEL SERIAL
+		if (data.match(/^{/)) {
+			console.log('recvData: ' + data);
+			var json = $.parseJSON(data);
+			if ('P' in json && json.P == serialPort2) {
+				if(json.D) this.msg += json.D;
+				if (this.msg.match(/\n/)) {
+					macro.status('recibido de arduino');
+					macro.status(this.msg);
+					if(myWatchChiliPepprPause.isJson(this.msg)){
+						var response = $.parseJSON(this.msg);
+						//no hubo problema al ejecutar el comando
+						if(response.status == 1)
+						{
+							//la transaccion termino correctamente
+							if(response.msg == 'e'){
+								macro.status('transaccion completada');
+                                //Termino, enviar 1.
+								//myWatchChiliPepprPause.sendNextToolToArduino();
+
+								$('#current-tool').html(current_tool);
+							}
+						}
+						else
+						{
+							myWatchChiliPepprPause.enableControls();
+							macro.status('error de arduino');
+						}
+					}
+					else
+					{
+						macro.status(this.msg);
+					}
+					this.msg = ""; // clear buffer
+				}
+			}
+		}
+	},
+
+               msg: "", 
+
+                setupSubscribe: function() { // SUBSCRIBIRSE A LOS EVENTOS
+
+chilipeppr.subscribe("/com-chilipeppr-widget-gcode/onChiliPepprPauseOnExecute", this, this.onChiliPepprPauseOnExecute);
+//chilipeppr.subscribe("/com-chilipeppr-widget-gcode/onChiliPepprPauseOnComplete", this, this.onChiliPepprPauseOnComplete);
+
+chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onRecvData);
+},
+
+
                 /**
                  * Call this method from init to setup all the buttons when this widget
                  * is first loaded. This basically attaches click events to your 
