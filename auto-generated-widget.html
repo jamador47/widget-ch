@@ -277,7 +277,7 @@ chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onR
                     
                     $('#' + this.id + ' .btn-guardarherramientas').click(function() {
                           
-var url = "http://localhost:8000/actualizarh/";
+var url = "http://192.168.0.98/actualizarh/";
 
 url = url.concat(document.getElementById("herramientah1").value);
 url = url.concat("&");
@@ -428,7 +428,7 @@ var client = new HttpClient();
                       anHttpRequest.send(null);
                   }
               }
-              var theurl = 'http://localhost:8000/geth';
+              var theurl = 'http://192.168.0.98/geth';
               var client = new HttpClient();
               client.get(theurl, function(response) {
     var obj = JSON.parse(response);
