@@ -297,10 +297,27 @@ chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onR
                       anHttpRequest.send(null);
                   }
               }
-              var theurl = 'http://192.168.0.98/api/obtenerorigenes/';
+              var theurl = 'http://192.168.0.89/arduino/digital/27/1';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+setTimeout(function(){
+    var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/27/0';
               var client = new HttpClient();
               client.get(theurl, function(response) {
 
+              });
+},1000);
               });
 
                     }   
@@ -308,13 +325,297 @@ chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onR
 
             /***FIN ABRIR CARRUSEL*/
 
+                    /***INICIO CERRAR CARRUSEL*/
+                    $('#' + this.id + ' .btn-cerrarcarrusel').click(function() {
+                        var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/28/1';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+setTimeout(function(){
+    var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/28/0';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+
+              });
+},1000);
+              });
+
+                    }   
+                    );
+
+            /***FIN CERRAR CARRUSEL*/
+
+
+                                /***INICIO CERRAR HUSILLO*/
+                                $('#' + this.id + ' .btn-cerrarhusillo').click(function() {
+                        var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/22/1';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+setTimeout(function(){
+    var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/22/0';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+
+              });
+},1000);
+              });
+
+                    }   
+                    );
+
+            /***FIN CERRAR HUSILLO*/
+
+
+
+                                            /***INICIO ABRIR HUSILLO*/
+                                            $('#' + this.id + ' .btn-abrirhusillo').click(function() {
+                        var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/27/1';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+setTimeout(function(){
+    var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/27/0';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+
+              });
+},1000);
+              });
+
+                    }   
+                    );
+
+            /***FIN ABRIR HUSILLO*/
+
+
+
+               /***INICIO BRAZO ARRIBA*/
+               $('#' + this.id + ' .btn-brazoarriba').click(function() {
+                        var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/19/1';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+setTimeout(function(){
+    var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/19/0';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+
+              });
+},1000);
+              });
+
+                    }   
+                    );
+
+            /***FIN BRAZO ARRIBA*/
+
+
+
+            
+
+               /***INICIO BRAZO ABAJO*/
+               $('#' + this.id + ' .btn-brazoabajo').click(function() {
+                        var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/2/1';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+setTimeout(function(){
+    var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/2/0';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+
+              });
+},1000);
+              });
+
+                    }   
+                    );
+
+            /***FIN BRAZO ABAJO*/
+
+
+                    /***INICIO ROTAR brazo reloj*/
+
+
+                    $('#' + this.id + ' .btn-brazoreloj').click(function() {
+                        var cmd  = "w";
+chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    }   
+                    );
+
+                    /***FIN ROTAR brazo reloj*/
+
+
+                    
+                    /***INICIO ROTAR brazo antireloj*/
+
+
+                    $('#' + this.id + ' .btn-brazoantireloj').click(function() {
+                        var cmd  = "z";
+chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    }   
+                    );
+
+                    /***FIN ROTAR brazo antireloj*/
+
+
+
+                    
+                    /***INICIO z1 Trabajo*/
+
+
+                    $('#' + this.id + ' .btn-z1trabajo').click(function() {
+                        var cmd  = "p";
+chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    }   
+                    );
+
+                    /***FIN z1 trabajo*/
+
+                                        /***INICIO z1 Home*/
+
+
+                                        $('#' + this.id + ' .btn-z1home').click(function() {
+                        var cmd  = "g";
+chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    }   
+                    );
+
+                    /***FIN z1 home*/
+
+                                        /***INICIO HOMEBRAZO*/
+
+
+                                        $('#' + this.id + ' .btn-homebrazo').click(function() {
+                        var cmd  = "u";
+chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    }   
+                    );
+
+                    /***FIN HOMEBRAZO*/
+                                        /***INICIO HOMECARRUSEL*/
+
+
+                                        $('#' + this.id + ' .btn-homecarrusel').click(function() {
+                        var cmd  = "f";
+chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    }   
+                    );
+
+                    /***FIN HOMECARRUSEL*/
+
 
                     /***INICIO ROTAR CARRUSEL*/
 
 
                     $('#' + this.id + ' .btn-rotarcarrusel').click(function() {
                         var cmd  = "i"+document.getElementById("carrusel").value;
-                        alert(cmd);
 chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
                     }   
                     );
