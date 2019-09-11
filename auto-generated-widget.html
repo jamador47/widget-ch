@@ -124,6 +124,7 @@
                  * Define the publish signals that this widget/element owns or defines so that
                  * other widgets know how to subscribe to them and what they do.
                  */
+
                 publish: {
                     // Define a key:value pair here as strings to document what signals you publish.
                     '/onExampleGenerate': 'Example: Publish this signal when we go to generate gcode.'
@@ -164,6 +165,7 @@
 
                     this.setupUiFromLocalStorage();
                     this.btnSetup();
+                    
                     this.forkSetup();
                     this.setupSubscribe();
 
@@ -274,7 +276,56 @@ chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onR
                     // Init Hello World 2 button on Tab 1. Notice the use
                     // of the slick .bind(this) technique to correctly set "this"
                     // when the callback is called
-                    
+
+
+
+
+
+                    /************************INICIO CONTROLES MANUALES **************************/
+
+
+                    /***INICIO ABRIR CARRUSEL*/
+                    $('#' + this.id + ' .btn-abrircarrusel').click(function() {
+                        var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.98/api/obtenerorigenes/';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+
+              });
+
+                    }   
+                    );
+
+            /***FIN ABRIR CARRUSEL*/
+
+
+                    /***INICIO ROTAR CARRUSEL*/
+
+
+                    $('#' + this.id + ' .btn-rotarcarrusel').click(function() {
+                        var cmd  = "i"+document.getElementById("carrusel").value;
+                        alert(cmd);
+chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    }   
+                    );
+
+                    /***FIN ROTAR CARRUSEL*/
+
+                    /************************FIN CONTROLES MANUALES **************************/
+
+
+
+
                     $('#' + this.id + ' .btn-guardarherramientas').click(function() {
                           
 var url = "http://192.168.0.98/actualizarh/";
@@ -1649,7 +1700,7 @@ method: 'GET'
 
 
                         <b>Rotar Carrusel</b><br>
-                        <select id="Carrusel">
+                        <select id="carrusel">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
