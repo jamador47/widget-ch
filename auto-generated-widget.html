@@ -601,12 +601,46 @@ chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serial
                     /***FIN HOMEBRAZO*/
                                         /***INICIO HOMECARRUSEL*/
 
-
+//VALIDAR Válvula
                                         $('#' + this.id + ' .btn-homecarrusel').click(function() {
+                                            
+var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/18';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+                  
+                var res = response.split("Pin D41 set to ");
+
+response = parseInt(res[1]);
+
+if (response == 1){
                         var cmd  = "f";
 chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    
+                    
+                }
+else{
+
+alert("Debe bloquear las válvula del carrusel para poder moverlo.");
+
+}
+
+
+
                     }   
                     );
+
+                    });
 
                     /***FIN HOMECARRUSEL*/
 
@@ -615,11 +649,45 @@ chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serial
 
 
                     $('#' + this.id + ' .btn-rotarcarrusel').click(function() {
+//VALIDAR Válvula
+
+var HttpClient = function() {
+                  this.get = function(aUrl, aCallback) {
+                      var anHttpRequest = new XMLHttpRequest();
+                      anHttpRequest.onreadystatechange = function() {
+                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                              aCallback(anHttpRequest.responseText);
+                      }
+                      anHttpRequest.open("GET", aUrl, true);
+                      anHttpRequest.send(null);
+                  }
+              }
+              var theurl = 'http://192.168.0.89/arduino/digital/18';
+              var client = new HttpClient();
+              client.get(theurl, function(response) {
+                  
+                var res = response.split("Pin D41 set to ");
+
+response = parseInt(res[1]);
+
+if (response == 1){
                         var cmd  = "i"+document.getElementById("carrusel").value;
 chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+}
+else{
+
+alert("Debe bloquear las válvula del carrusel para poder moverlo.");
+
+}
+
+
+
                     }   
                     );
 
+                    });
+
+                    
                     /***FIN ROTAR CARRUSEL*/
 
                     /************************FIN CONTROLES MANUALES **************************/
