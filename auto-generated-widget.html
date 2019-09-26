@@ -24,8 +24,8 @@
     </style>
 
     <script type='text/javascript'>
-        const serialPort = "/dev/ttyUSB0";
-        const serialPort2 = "/dev/ttyACM0";
+        const serialPort = "COM3";
+        const serialPort2 = "COM4";
         //<![CDATA[
         /* global requirejs cprequire cpdefine chilipeppr THREE */
         // Defining the globals above helps Cloud9 not show warnings for those variables
@@ -990,7 +990,7 @@ if(typeof sensor_status != 'undefined')
     else
     {
         this.selectCurrentPocket();
-        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send /dev/ttyACM0 i" + pocket + "\n");			
+        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 i" + pocket + "\n");			
     }
     
 }
