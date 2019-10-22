@@ -867,11 +867,13 @@ if (response == 1){
                 
                 alert("ES LINEAL");
                 var enhusillo = 100;
+
+                var valortoolenhusillo = valortool;
                 
                 //BUSCAR SI HAY HERRAMIENTA EN EL HUSILLO
                         for( var i = 0; i < 17; i++){
                 
-                if (obj[i]['enhusillo'] == 1){
+                if (parseInt(obj[i]['enhusillo']) == 1){
                     enhusillo = 1;
                     var indexherenhusillo = i;
                     var valortoolenhusillo = i+1;
@@ -1000,6 +1002,7 @@ if (response == 1){
                  // Si la herramienta en el husillo es la herramienta que se pidió.
                  else{
                 
+                alert("NO HAY EN HUSILLO");
                 
                     var HttpClient = function () {
                                 
@@ -2503,7 +2506,7 @@ method: 'GET'
                               <option value="17">17</option>
                               <option value="18">18</option>
                             </select>
-                            <button type="button" class="btn btn-xs btn-default btn-cambiarh" style="margin: 4px 0;">Cambiar herramienta</button>
+                            <button type="button" class="btn btn-xs btn-default btn-cambiarh" style="margin: 4px 0;">Cambiar Herramienta</button>
   
                     </div>
 
