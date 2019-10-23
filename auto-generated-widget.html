@@ -768,7 +768,7 @@ if (response == 1){
                 
                         // CAMBIO BRAZO
                 
-                cmd = "x"+valortool+";"+obj[indexher]['longitud'];
+                cmd = "x"+valortool+";1";
                 chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
                 
                 
@@ -786,7 +786,7 @@ if (response == 1){
                 anHttpRequest.send(null);
                 }
                 }
-                var theurl = 'http://192.168.0.98/cambiobrazomodoh';
+                var theurl = 'http://192.168.0.98/cambiobrazomodoh/'+valortool;
                 var client = new HttpClient();
                 client.get(theurl, function (response) {
                 
