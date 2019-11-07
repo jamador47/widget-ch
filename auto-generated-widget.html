@@ -701,6 +701,26 @@ alert("Debe bloquear las válvula del carrusel para poder moverlo.");
                      $('#' + this.id + ' .btn-cambiarh').click(function() {
 //VALIDAR Válvula
 
+                        var HttpClient = function() {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.88/arduino/analog/5';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            
+                          var res = response.split("Pin A5 reads analog ");
+          
+          response = parseInt(res[1]);
+          
+          if (response > 900){
 var HttpClient = function() {
                   this.get = function(aUrl, aCallback) {
                       var anHttpRequest = new XMLHttpRequest();
@@ -1073,7 +1093,11 @@ alert("Debe bloquear las válvula del carrusel para poder moverlo.");
 
                     }   
                     );
-
+                }
+                else{
+                    alert("El husillo sigue girando.")
+                }
+            });
                     });
 
                     
