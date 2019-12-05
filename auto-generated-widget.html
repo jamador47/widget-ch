@@ -15,9 +15,9 @@
 
     <style type='text/css'>
         /* CSS for ChiliPeppr Widget */
-
+        
         #com-chilipeppr-widget-ch {}
-
+        
         #com-chilipeppr-widget-ch .nav-tabs>li>a {
             padding: 2px 6px;
         }
@@ -63,7 +63,7 @@
             }
         });
 
-        cprequire_test(["inline:com-chilipeppr-widget-ch"], function (myWidget) {
+        cprequire_test(["inline:com-chilipeppr-widget-ch"], function(myWidget) {
 
             // Test this element. This code is auto-removed by the chilipeppr.load()
             // when using this widget in production. So use the cpquire_test to do things
@@ -86,9 +86,9 @@
             chilipeppr.load(
                 "#testDivForFlashMessageWidget",
                 "http://raw.githubusercontent.com/chilipeppr/element-flash/master/auto-generated-widget.html",
-                function () {
+                function() {
                     console.log("mycallback got called after loading flash msg module");
-                    cprequire(["inline:com-chilipeppr-elem-flashmsg"], function (fm) {
+                    cprequire(["inline:com-chilipeppr-elem-flashmsg"], function(fm) {
                         //console.log("inside require of " + fm.id);
                         fm.init();
                     });
@@ -100,10 +100,10 @@
             $('#' + myWidget.id).css('margin', '20px');
             $('title').html(myWidget.name);
 
-        } /*end_test*/);
+        } /*end_test*/ );
 
         // This is the main definition of your widget. Give it a unique name.
-        cpdefine("inline:com-chilipeppr-widget-ch", ["chilipeppr_ready", /* other dependencies here */], function () {
+        cpdefine("inline:com-chilipeppr-widget-ch", ["chilipeppr_ready", /* other dependencies here */ ], function() {
             return {
                 /**
                  * The ID of the widget. You must define this and make it unique.
@@ -111,10 +111,10 @@
                 id: "com-chilipeppr-widget-ch", // Make the id the same as the cpdefine id
                 name: "Widget / Template", // The descriptive name of your widget.
                 desc: "This example widget gives you a framework for creating your own widget. Please change this description once you fork this template and create your own widget. Make sure to run runme.js every time you are done editing your code so you can regenerate your README.md file, regenerate your auto-generated-widget.html, and automatically push your changes to Github.", // A description of what your widget does
-                url: "http://raw.githubusercontent.com/jamador47/widget-ch/master/auto-generated-widget.html",       // The final URL of the working widget as a single HTML file with CSS and Javascript inlined. You can let runme.js auto fill this if you are using Cloud9.
+                url: "http://raw.githubusercontent.com/jamador47/widget-ch/master/auto-generated-widget.html", // The final URL of the working widget as a single HTML file with CSS and Javascript inlined. You can let runme.js auto fill this if you are using Cloud9.
                 fiddleurl: "http://ide.c9.io/chilipeppr/widget-template", // The edit URL. This can be auto-filled by runme.js in Cloud9 if you'd like, or just define it on your own to help people know where they can edit/fork your widget
                 githuburl: "http://github.com/chilipeppr/widget-template", // The backing github repo
-                testurl: "https://preview.c9users.io/chilipeppr/widget-template/widget.html",   // The standalone working widget so can view it working by itself
+                testurl: "https://preview.c9users.io/chilipeppr/widget-template/widget.html", // The standalone working widget so can view it working by itself
                 /**
                  * Define pubsub signals below. These are basically ChiliPeppr's event system.
                  * ChiliPeppr uses amplify.js's pubsub system so please refer to docs at
@@ -160,12 +160,12 @@
                  * All widgets should have an init method. It should be run by the
                  * instantiating code like a workspace or a different widget.
                  */
-                init: function () {
+                init: function() {
                     console.log("I am being initted. Thanks.");
 
                     this.setupUiFromLocalStorage();
                     this.btnSetup();
-                    
+
                     this.forkSetup();
                     this.setupSubscribe();
 
@@ -174,53 +174,48 @@
                 },
 
                 onRecvData: function(data) { // RECIBIENDO DATOS DEL SERIAL
-		if (data.match(/^{/)) {
-			console.log('recvData: ' + data);
-			var json = $.parseJSON(data);
-			if ('P' in json && json.P == serialPort2) {
-				if(json.D) this.msg += json.D;
-				if (this.msg.match(/\n/)) {
-					macro.status('recibido de arduino');
-					macro.status(this.msg);
-					if(myWatchChiliPepprPause.isJson(this.msg)){
-						var response = $.parseJSON(this.msg);
-						//no hubo problema al ejecutar el comando
-						if(response.status == 1)
-						{
-							//la transaccion termino correctamente
-							if(response.msg == 'e'){
-								macro.status('transaccion completada');
-                                //Termino, enviar 1.
-								//myWatchChiliPepprPause.sendNextToolToArduino();
+                    if (data.match(/^{/)) {
+                        console.log('recvData: ' + data);
+                        var json = $.parseJSON(data);
+                        if ('P' in json && json.P == serialPort2) {
+                            if (json.D) this.msg += json.D;
+                            if (this.msg.match(/\n/)) {
+                                macro.status('recibido de arduino');
+                                macro.status(this.msg);
+                                if (myWatchChiliPepprPause.isJson(this.msg)) {
+                                    var response = $.parseJSON(this.msg);
+                                    //no hubo problema al ejecutar el comando
+                                    if (response.status == 1) {
+                                        //la transaccion termino correctamente
+                                        if (response.msg == 'e') {
+                                            macro.status('transaccion completada');
+                                            //Termino, enviar 1.
+                                            //myWatchChiliPepprPause.sendNextToolToArduino();
 
-								$('#current-tool').html(current_tool);
-							}
-						}
-						else
-						{
-							myWatchChiliPepprPause.enableControls();
-							macro.status('error de arduino');
-						}
-					}
-					else
-					{
-						macro.status(this.msg);
-					}
-					this.msg = ""; // clear buffer
-				}
-			}
-		}
-	},
+                                            $('#current-tool').html(current_tool);
+                                        }
+                                    } else {
+                                        myWatchChiliPepprPause.enableControls();
+                                        macro.status('error de arduino');
+                                    }
+                                } else {
+                                    macro.status(this.msg);
+                                }
+                                this.msg = ""; // clear buffer
+                            }
+                        }
+                    }
+                },
 
-               msg: "", 
+                msg: "",
 
                 setupSubscribe: function() { // SUBSCRIBIRSE A LOS EVENTOS
 
-chilipeppr.subscribe("/com-chilipeppr-widget-gcode/onChiliPepprPauseOnExecute", this, this.onChiliPepprPauseOnExecute);
-//chilipeppr.subscribe("/com-chilipeppr-widget-gcode/onChiliPepprPauseOnComplete", this, this.onChiliPepprPauseOnComplete);
+                    chilipeppr.subscribe("/com-chilipeppr-widget-gcode/onChiliPepprPauseOnExecute", this, this.onChiliPepprPauseOnExecute);
+                    //chilipeppr.subscribe("/com-chilipeppr-widget-gcode/onChiliPepprPauseOnComplete", this, this.onChiliPepprPauseOnComplete);
 
-chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onRecvData);
-},
+                    chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onRecvData);
+                },
 
 
                 /**
@@ -229,17 +224,16 @@ chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onR
                  * buttons. It also turns on all the bootstrap popovers by scanning
                  * the entire DOM of the widget.
                  */
-                btnSetup: function () {
+                btnSetup: function() {
 
                     // Chevron hide/show body
                     var that = this;
-                    $('#' + this.id + ' .hidebody').click(function (evt) {
+                    $('#' + this.id + ' .hidebody').click(function(evt) {
                         console.log("hide/unhide body");
                         if ($('#' + that.id + ' .panel-body').hasClass('hidden')) {
                             // it's hidden, unhide
                             that.showBody(evt);
-                        }
-                        else {
+                        } else {
                             // hide
                             that.hideBody(evt);
                         }
@@ -260,7 +254,7 @@ chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onR
                     // as opposed to a full callback method in the Hello Word 2
                     // example further below. Notice we have to use "that" so 
                     // that the this is set correctly inside the anonymous method
-                    $('#' + this.id + ' .btn-sayhello').click(function () {
+                    $('#' + this.id + ' .btn-sayhello').click(function() {
                         console.log("saying hello");
                         // Make sure popover is immediately hidden
                         $('#' + that.id + ' .btn-sayhello').popover("hide");
@@ -287,358 +281,345 @@ chilipeppr.subscribe("/com-chilipeppr-widget-serialport/ws/recv", this, this.onR
                     /***INICIO ABRIR CARRUSEL*/
                     $('#' + this.id + ' .btn-abrircarrusel').click(function() {
                         var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/27/1';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-setTimeout(function(){
-    var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/27/0';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/27/1';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            setTimeout(function() {
+                                var HttpClient = function() {
+                                    this.get = function(aUrl, aCallback) {
+                                        var anHttpRequest = new XMLHttpRequest();
+                                        anHttpRequest.onreadystatechange = function() {
+                                            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                aCallback(anHttpRequest.responseText);
+                                        }
+                                        anHttpRequest.open("GET", aUrl, true);
+                                        anHttpRequest.send(null);
+                                    }
+                                }
+                                var theurl = 'http://192.168.0.80/arduino/digital/27/0';
+                                var client = new HttpClient();
+                                client.get(theurl, function(response) {
 
-              });
-},1000);
-              });
+                                });
+                            }, 1000);
+                        });
 
-                    }   
-                    );
+                    });
 
-            /***FIN ABRIR CARRUSEL*/
+                    /***FIN ABRIR CARRUSEL*/
 
                     /***INICIO CERRAR CARRUSEL*/
                     $('#' + this.id + ' .btn-cerrarcarrusel').click(function() {
                         var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/28/1';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-setTimeout(function(){
-    var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/28/0';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/28/1';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            setTimeout(function() {
+                                var HttpClient = function() {
+                                    this.get = function(aUrl, aCallback) {
+                                        var anHttpRequest = new XMLHttpRequest();
+                                        anHttpRequest.onreadystatechange = function() {
+                                            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                aCallback(anHttpRequest.responseText);
+                                        }
+                                        anHttpRequest.open("GET", aUrl, true);
+                                        anHttpRequest.send(null);
+                                    }
+                                }
+                                var theurl = 'http://192.168.0.80/arduino/digital/28/0';
+                                var client = new HttpClient();
+                                client.get(theurl, function(response) {
 
-              });
-},1000);
-              });
+                                });
+                            }, 1000);
+                        });
 
-                    }   
-                    );
+                    });
 
-            /***FIN CERRAR CARRUSEL*/
+                    /***FIN CERRAR CARRUSEL*/
 
 
-                                /***INICIO CERRAR HUSILLO*/
-                                $('#' + this.id + ' .btn-cerrarhusillo').click(function() {
+                    /***INICIO CERRAR HUSILLO*/
+                    $('#' + this.id + ' .btn-cerrarhusillo').click(function() {
                         var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/22/1';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-setTimeout(function(){
-    var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/22/0';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/22/1';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            setTimeout(function() {
+                                var HttpClient = function() {
+                                    this.get = function(aUrl, aCallback) {
+                                        var anHttpRequest = new XMLHttpRequest();
+                                        anHttpRequest.onreadystatechange = function() {
+                                            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                aCallback(anHttpRequest.responseText);
+                                        }
+                                        anHttpRequest.open("GET", aUrl, true);
+                                        anHttpRequest.send(null);
+                                    }
+                                }
+                                var theurl = 'http://192.168.0.80/arduino/digital/22/0';
+                                var client = new HttpClient();
+                                client.get(theurl, function(response) {
 
-              });
-},1000);
-              });
+                                });
+                            }, 1000);
+                        });
 
-                    }   
-                    );
+                    });
 
-            /***FIN CERRAR HUSILLO*/
-
+                    /***FIN CERRAR HUSILLO*/
 
 
-                                            /***INICIO ABRIR HUSILLO*/
-                                            $('#' + this.id + ' .btn-abrirhusillo').click(function() {
+
+                    /***INICIO ABRIR HUSILLO*/
+                    $('#' + this.id + ' .btn-abrirhusillo').click(function() {
                         var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/23/1';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-setTimeout(function(){
-    var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/23/0';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/23/1';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            setTimeout(function() {
+                                var HttpClient = function() {
+                                    this.get = function(aUrl, aCallback) {
+                                        var anHttpRequest = new XMLHttpRequest();
+                                        anHttpRequest.onreadystatechange = function() {
+                                            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                aCallback(anHttpRequest.responseText);
+                                        }
+                                        anHttpRequest.open("GET", aUrl, true);
+                                        anHttpRequest.send(null);
+                                    }
+                                }
+                                var theurl = 'http://192.168.0.80/arduino/digital/23/0';
+                                var client = new HttpClient();
+                                client.get(theurl, function(response) {
 
-              });
-},1000);
-              });
+                                });
+                            }, 1000);
+                        });
 
-                    }   
-                    );
+                    });
 
-            /***FIN ABRIR HUSILLO*/
-
+                    /***FIN ABRIR HUSILLO*/
 
 
-               /***INICIO BRAZO ARRIBA*/
-               $('#' + this.id + ' .btn-brazoarriba').click(function() {
+
+                    /***INICIO BRAZO ARRIBA*/
+                    $('#' + this.id + ' .btn-brazoarriba').click(function() {
                         var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/19/1';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-setTimeout(function(){
-    var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/19/0';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/19/1';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            setTimeout(function() {
+                                var HttpClient = function() {
+                                    this.get = function(aUrl, aCallback) {
+                                        var anHttpRequest = new XMLHttpRequest();
+                                        anHttpRequest.onreadystatechange = function() {
+                                            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                aCallback(anHttpRequest.responseText);
+                                        }
+                                        anHttpRequest.open("GET", aUrl, true);
+                                        anHttpRequest.send(null);
+                                    }
+                                }
+                                var theurl = 'http://192.168.0.80/arduino/digital/19/0';
+                                var client = new HttpClient();
+                                client.get(theurl, function(response) {
 
-              });
-},1000);
-              });
+                                });
+                            }, 1000);
+                        });
 
-                    }   
-                    );
+                    });
 
-            /***FIN BRAZO ARRIBA*/
-
+                    /***FIN BRAZO ARRIBA*/
 
 
-            
 
-               /***INICIO BRAZO ABAJO*/
-               $('#' + this.id + ' .btn-brazoabajo').click(function() {
+
+
+                    /***INICIO BRAZO ABAJO*/
+                    $('#' + this.id + ' .btn-brazoabajo').click(function() {
                         var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/2/1';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-setTimeout(function(){
-    var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/2/0';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/2/1';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            setTimeout(function() {
+                                var HttpClient = function() {
+                                    this.get = function(aUrl, aCallback) {
+                                        var anHttpRequest = new XMLHttpRequest();
+                                        anHttpRequest.onreadystatechange = function() {
+                                            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                aCallback(anHttpRequest.responseText);
+                                        }
+                                        anHttpRequest.open("GET", aUrl, true);
+                                        anHttpRequest.send(null);
+                                    }
+                                }
+                                var theurl = 'http://192.168.0.80/arduino/digital/2/0';
+                                var client = new HttpClient();
+                                client.get(theurl, function(response) {
 
-              });
-},1000);
-              });
+                                });
+                            }, 1000);
+                        });
 
-                    }   
-                    );
+                    });
 
-            /***FIN BRAZO ABAJO*/
+                    /***FIN BRAZO ABAJO*/
 
 
                     /***INICIO ROTAR brazo reloj*/
 
 
                     $('#' + this.id + ' .btn-brazoreloj').click(function() {
-                        var cmd  = "w";
-chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
-                    }   
-                    );
+                        var cmd = "w";
+                        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    });
 
                     /***FIN ROTAR brazo reloj*/
 
 
-                    
+
                     /***INICIO ROTAR brazo antireloj*/
 
 
                     $('#' + this.id + ' .btn-brazoantireloj').click(function() {
-                        var cmd  = "z";
-chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
-                    }   
-                    );
+                        var cmd = "z";
+                        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    });
 
                     /***FIN ROTAR brazo antireloj*/
 
 
 
-                    
+
                     /***INICIO z1 Trabajo*/
 
 
                     $('#' + this.id + ' .btn-z1trabajo').click(function() {
-                        var cmd  = "p";
-chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
-                    }   
-                    );
+                        var cmd = "p";
+                        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    });
 
                     /***FIN z1 trabajo*/
 
-                                        /***INICIO z1 Home*/
+                    /***INICIO z1 Home*/
 
 
-                                        $('#' + this.id + ' .btn-z1home').click(function() {
-                        var cmd  = "g";
-chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
-                    }   
-                    );
+                    $('#' + this.id + ' .btn-z1home').click(function() {
+                        var cmd = "g";
+                        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    });
 
                     /***FIN z1 home*/
 
-                                        /***INICIO HOMEBRAZO*/
+                    /***INICIO HOMEBRAZO*/
 
 
-                                        $('#' + this.id + ' .btn-homebrazo').click(function() {
-                        var cmd  = "u";
-chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
-                    }   
-                    );
+                    $('#' + this.id + ' .btn-homebrazo').click(function() {
+                        var cmd = "u";
+                        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                    });
 
                     /***FIN HOMEBRAZO*/
-                                        /***INICIO HOMECARRUSEL*/
+                    /***INICIO HOMECARRUSEL*/
 
-//VALIDAR Válvula
-                                        $('#' + this.id + ' .btn-homecarrusel').click(function() {
-                                            
-var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/29';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-                  
-                var res = response.split("Pin D29 set to ");
+                    //VALIDAR Válvula
+                    $('#' + this.id + ' .btn-homecarrusel').click(function() {
 
-response = parseInt(res[1]);
+                        var HttpClient = function() {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/29';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
 
-if (response == 1){
-                        var cmd  = "f";
-chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
-                    
-                    
-                }
-else{
+                            var res = response.split("Pin D29 set to ");
 
-alert("Debe bloquear las válvula del carrusel para poder moverlo.");
+                            response = parseInt(res[1]);
 
-}
+                            if (response == 1) {
+                                var cmd = "f";
+                                chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
 
 
+                            } else {
 
-                    }   
-                    );
+                                alert("Debe bloquear las válvula del carrusel para poder moverlo.");
+
+                            }
+
+
+
+                        });
 
                     });
 
@@ -649,45 +630,43 @@ alert("Debe bloquear las válvula del carrusel para poder moverlo.");
 
 
                     $('#' + this.id + ' .btn-rotarcarrusel').click(function() {
-//VALIDAR Válvula
+                        //VALIDAR Válvula
 
-var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/29';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-                  
-                var res = response.split("Pin D29 set to ");
+                        var HttpClient = function() {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.80/arduino/digital/29';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
 
-response = parseInt(res[1]);
+                            var res = response.split("Pin D29 set to ");
 
-if (response == 1){
-                        var cmd  = "i"+document.getElementById("carrusel").value;
-chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
-}
-else{
+                            response = parseInt(res[1]);
 
-alert("Debe bloquear las válvula del carrusel para poder moverlo.");
+                            if (response == 1) {
+                                var cmd = "i" + document.getElementById("carrusel").value;
+                                chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort2 + " " + cmd);
+                            } else {
 
-}
+                                alert("Debe bloquear las válvula del carrusel para poder moverlo.");
 
+                            }
 
 
-                    }   
-                    );
+
+                        });
 
                     });
 
-                    
+
                     /***FIN ROTAR CARRUSEL*/
 
 
@@ -695,11 +674,11 @@ alert("Debe bloquear las válvula del carrusel para poder moverlo.");
 
 
 
-                     /***INICIO CAMBIO H*/
+                    /***INICIO CAMBIO H*/
 
 
-                     $('#' + this.id + ' .btn-cambiarh').click(function() {
-//VALIDAR Válvula
+                    $('#' + this.id + ' .btn-cambiarh').click(function() {
+                        //VALIDAR Válvula
 
                         var HttpClient = function() {
                             this.get = function(aUrl, aCallback) {
@@ -715,392 +694,385 @@ alert("Debe bloquear las válvula del carrusel para poder moverlo.");
                         var theurl = 'http://192.168.0.88/arduino/analog/5';
                         var client = new HttpClient();
                         client.get(theurl, function(response) {
-                            
-                          var res = response.split("Pin A5 reads analog ");
-          
-          response = parseInt(res[1]);
-          
-          if (response > 900){
-var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.80/arduino/digital/29';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-                  
-                var res = response.split("Pin D29 set to ");
 
-response = parseInt(res[1]);
+                            var res = response.split("Pin A5 reads analog ");
 
-if (response == 1){
+                            response = parseInt(res[1]);
 
-
-// COMIENZA CH
-                var esto = this;                
-                var HttpClient = function () {
-                         
-                this.get = function (aUrl, aCallback) {
-                var anHttpRequest = new XMLHttpRequest();
-                anHttpRequest.onreadystatechange = function () {
-                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                aCallback(anHttpRequest.responseText);
-                }
-                anHttpRequest.open("GET", aUrl, true);
-                anHttpRequest.send(null);
-                }
-                }
-                var theurl = 'http://192.168.0.98/geth';
-                var client = new HttpClient();
-                client.get(theurl, function (response) {
-                
-                    var obj = JSON.parse(response);
-                    var modoh = parseInt(obj[0]['modoh']);
-                
-                        
-                        var toolausar = parseInt(document.getElementById("herramienta").value);
-                alert(toolausar);
-                alert(modoh);
-                
-                // SI ES MODO H:
-                    if (modoh == 1){
-                
-                            // Loop para encontrar que pocket tiene la herramienta pedida.
-                                for( var i = 0; i < 17; i++){
-                
-                                if (obj[i]['herramienta'] == toolausar){
-                                    // NUMERO DE INDEX DEL POCKET A COPIAR DATOS DE LONGITUD.
-                                    var indexher = i;
-                                    var valortool = i+1;
-                                }
-                                 }
-                
-                
-                if (!(obj[indexher]['enhusillo'])){
-                
-                
-                        // CAMBIO BRAZO
-                
-                cmd = "x"+valortool+";1";
-                chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
-                
-                
-                
-                 //Cambio brazo en la tabla.
-                        var HttpClient = function () {
-                         
-                         this.get = function (aUrl, aCallback) {
-                var anHttpRequest = new XMLHttpRequest();
-                anHttpRequest.onreadystatechange = function () {
-                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                aCallback(anHttpRequest.responseText);
-                }
-                anHttpRequest.open("GET", aUrl, true);
-                anHttpRequest.send(null);
-                }
-                }
-                var theurl = 'http://192.168.0.98/cambiobrazomodoh/'+valortool;
-                var client = new HttpClient();
-                client.get(theurl, function (response) {
-                
-                });
-                
-                }
-                  //ROTACIÓN a nueva posicion.
-                
-                
-                  //codigo de busqueda de siguiente herramienta -- SOLO EN GCODE.
-           
-           /*       var largodecodigo = esto.gcode.lines.length;
-                 var valorsiguientetool = 1000;
-                  
-                 for (var n=(idnum); n<largodecodigo; n++){
-                
-                    var gcodetemporal = esto.gcode.lines[n];
-                    if(gcodetemporal.match(/\bM6\b/i)){
-                        var linean = "N"+(n+1);
-                        var lineatemporal = gcodelinetemporal.replace('M6', "").trim();
-                        lineatemporal = lineatemporal.replace('T', "").trim();
-                        lineatemporal = lineatemporal.replace('M7', "").trim();
-                        lineatemporal = lineatemporal.replace(linean, "").trim();
-                
-                        var valorstool = parseInt(lineatemporal);
-                                            n=100000;
-                
+                            if (response > 900) {
+                                var HttpClient = function() {
+                                    this.get = function(aUrl, aCallback) {
+                                        var anHttpRequest = new XMLHttpRequest();
+                                        anHttpRequest.onreadystatechange = function() {
+                                            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                aCallback(anHttpRequest.responseText);
                                         }
+                                        anHttpRequest.open("GET", aUrl, true);
+                                        anHttpRequest.send(null);
                                     }
-                
-                                    for( var i = 0; i < 17; i++){
-                if (parseInt(obj[i]['herramienta']) == valorstool){
-                    // NUMERO DE INDEX DEL POCKET A COPIAR DATOS DE LONGITUD.
-                    var indexher = i;
-                   valorsiguientetool = i+1;
-                }}
-                
-                //si existe alguna siguiente tool hacer rotacion. si no, no hacer nada.
-                
-                
-                setTimeout(function(){
-                    if(valorsiguientetool != 1000){
-                
-                    cmd = "i"+valorsiguientetool;
-                chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
-                 //Cambio brazo en la tabla.
-                        var HttpClient = function () {
-                         
-                         this.get = function (aUrl, aCallback) {
-                var anHttpRequest = new XMLHttpRequest();
-                anHttpRequest.onreadystatechange = function () {
-                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                aCallback(anHttpRequest.responseText);
-                }
-                anHttpRequest.open("GET", aUrl, true);
-                anHttpRequest.send(null);
-                }
-                }
-                var theurl = 'http://192.168.0.98/rotarcar/'+valorsiguientetool;
-                var client = new HttpClient();
-                client.get(theurl, function (response) {
-                
-                });
-                   
-                }
-                var cmd  = "~";
-                   chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort + " " + cmd);
-                },15000);
-                */      
-                
-                
-                    }
-                
-                // SI ES MODO LINEAL:  ***********************************************************************************************
-                    else{
-                        var indexher = toolausar - 1;
-                        var valortool = toolausar;
-                
-                alert("ES LINEAL");
-                var enhusillo = 100;
+                                }
+                                var theurl = 'http://192.168.0.80/arduino/digital/29';
+                                var client = new HttpClient();
+                                client.get(theurl, function(response) {
 
-                var valortoolenhusillo = valortool;
-                
-                //BUSCAR SI HAY HERRAMIENTA EN EL HUSILLO
-                        for( var i = 0; i < 17; i++){
-                
-                if (parseInt(obj[i]['enhusillo']) == 1){
-                    enhusillo = 1;
-                    var indexherenhusillo = i;
-                    var valortoolenhusillo = i+1;
-                }
-                
-                 }
-                
-                 if (valortoolenhusillo != valortool)
-                {
-                 //SI HAY: REGRESARLA A POSICIÓN ORIGINAL  Y luego cambiar nueva
-                 if (enhusillo == 1){
-                
-                    // cambio posicion original.
-                
-                
-                    // ROTAR EN TABLA
-                            var HttpClient = function () {
-                                
-                                this.get = function (aUrl, aCallback) {
-                        var anHttpRequest = new XMLHttpRequest();
-                        anHttpRequest.onreadystatechange = function () {
-                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                        aCallback(anHttpRequest.responseText);
-                        }
-                        anHttpRequest.open("GET", aUrl, true);
-                        anHttpRequest.send(null);
-                        }
-                        }
-                        var theurl = 'http://192.168.0.98/rotarcar/'+valortoolenhusillo;
-                        var client = new HttpClient();
-                        client.get(theurl, function (response) {
-                
-                           // CAMBIAR EN TABLA
-                           var HttpClient = function () {
-                                
-                                this.get = function (aUrl, aCallback) {
-                        var anHttpRequest = new XMLHttpRequest();
-                        anHttpRequest.onreadystatechange = function () {
-                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                        aCallback(anHttpRequest.responseText);
-                        }
-                        anHttpRequest.open("GET", aUrl, true);
-                        anHttpRequest.send(null);
-                        }
-                        }
-                        var theurl = 'http://192.168.0.98/cambiobrazomodop';
-                        var client = new HttpClient();
-                        client.get(theurl, function (response) {
+                                    var res = response.split("Pin D29 set to ");
+
+                                    response = parseInt(res[1]);
+
+                                    if (response == 1) {
+
+
+                                        // COMIENZA CH
+                                        var esto = this;
+                                        var HttpClient = function() {
+
+                                            this.get = function(aUrl, aCallback) {
+                                                var anHttpRequest = new XMLHttpRequest();
+                                                anHttpRequest.onreadystatechange = function() {
+                                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                        aCallback(anHttpRequest.responseText);
+                                                }
+                                                anHttpRequest.open("GET", aUrl, true);
+                                                anHttpRequest.send(null);
+                                            }
+                                        }
+                                        var theurl = 'http://192.168.0.98/geth';
+                                        var client = new HttpClient();
+                                        client.get(theurl, function(response) {
+
+                                            var obj = JSON.parse(response);
+                                            var modoh = parseInt(obj[0]['modoh']);
+
+
+                                            var toolausar = parseInt(document.getElementById("herramienta").value);
+                                            alert(toolausar);
+                                            alert(modoh);
+
+                                            // SI ES MODO H:
+                                            if (modoh == 1) {
+
+                                                // Loop para encontrar que pocket tiene la herramienta pedida.
+                                                for (var i = 0; i < 17; i++) {
+
+                                                    if (obj[i]['herramienta'] == toolausar) {
+                                                        // NUMERO DE INDEX DEL POCKET A COPIAR DATOS DE LONGITUD.
+                                                        var indexher = i;
+                                                        var valortool = i + 1;
+                                                    }
+                                                }
+
+
+                                                if (!(obj[indexher]['enhusillo'])) {
+
+
+                                                    // CAMBIO BRAZO
+
+                                                    cmd = "x" + valortool + ";1";
+                                                    chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd);
+
+
+
+                                                    //Cambio brazo en la tabla.
+                                                    var HttpClient = function() {
+
+                                                        this.get = function(aUrl, aCallback) {
+                                                            var anHttpRequest = new XMLHttpRequest();
+                                                            anHttpRequest.onreadystatechange = function() {
+                                                                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                    aCallback(anHttpRequest.responseText);
+                                                            }
+                                                            anHttpRequest.open("GET", aUrl, true);
+                                                            anHttpRequest.send(null);
+                                                        }
+                                                    }
+                                                    var theurl = 'http://192.168.0.98/cambiobrazomodoh/' + valortool;
+                                                    var client = new HttpClient();
+                                                    client.get(theurl, function(response) {
+
+                                                    });
+
+                                                }
+                                                //ROTACIÓN a nueva posicion.
+
+
+                                                //codigo de busqueda de siguiente herramienta -- SOLO EN GCODE.
+
+                                                /*       var largodecodigo = esto.gcode.lines.length;
+                                                      var valorsiguientetool = 1000;
+                                                       
+                                                      for (var n=(idnum); n<largodecodigo; n++){
+                                                     
+                                                         var gcodetemporal = esto.gcode.lines[n];
+                                                         if(gcodetemporal.match(/\bM6\b/i)){
+                                                             var linean = "N"+(n+1);
+                                                             var lineatemporal = gcodelinetemporal.replace('M6', "").trim();
+                                                             lineatemporal = lineatemporal.replace('T', "").trim();
+                                                             lineatemporal = lineatemporal.replace('M7', "").trim();
+                                                             lineatemporal = lineatemporal.replace(linean, "").trim();
+                                                     
+                                                             var valorstool = parseInt(lineatemporal);
+                                                                                 n=100000;
+                                                     
+                                                                             }
+                                                                         }
+                                                     
+                                                                         for( var i = 0; i < 17; i++){
+                                                     if (parseInt(obj[i]['herramienta']) == valorstool){
+                                                         // NUMERO DE INDEX DEL POCKET A COPIAR DATOS DE LONGITUD.
+                                                         var indexher = i;
+                                                        valorsiguientetool = i+1;
+                                                     }}
+                                                     
+                                                     //si existe alguna siguiente tool hacer rotacion. si no, no hacer nada.
+                                                     
+                                                     
+                                                     setTimeout(function(){
+                                                         if(valorsiguientetool != 1000){
+                                                     
+                                                         cmd = "i"+valorsiguientetool;
+                                                     chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
+                                                      //Cambio brazo en la tabla.
+                                                             var HttpClient = function () {
+                                                              
+                                                              this.get = function (aUrl, aCallback) {
+                                                     var anHttpRequest = new XMLHttpRequest();
+                                                     anHttpRequest.onreadystatechange = function () {
+                                                     if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                     aCallback(anHttpRequest.responseText);
+                                                     }
+                                                     anHttpRequest.open("GET", aUrl, true);
+                                                     anHttpRequest.send(null);
+                                                     }
+                                                     }
+                                                     var theurl = 'http://192.168.0.98/rotarcar/'+valorsiguientetool;
+                                                     var client = new HttpClient();
+                                                     client.get(theurl, function (response) {
+                                                     
+                                                     });
+                                                        
+                                                     }
+                                                     var cmd  = "~";
+                                                        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send " + serialPort + " " + cmd);
+                                                     },15000);
+                                                     */
+
+
+                                            }
+
+                                            // SI ES MODO LINEAL:  ***********************************************************************************************
+                                            else {
+                                                var indexher = toolausar - 1;
+                                                var valortool = toolausar;
+
+                                                alert("ES LINEAL");
+                                                var enhusillo = 100;
+
+                                                var valortoolenhusillo = valortool;
+
+                                                //BUSCAR SI HAY HERRAMIENTA EN EL HUSILLO
+                                                for (var i = 0; i < 17; i++) {
+
+                                                    if (parseInt(obj[i]['enhusillo']) == 1) {
+                                                        enhusillo = 1;
+                                                        var indexherenhusillo = i;
+                                                        var valortoolenhusillo = i + 1;
+                                                    }
+
+                                                }
+
+                                                if (valortoolenhusillo != valortool) {
+                                                    //SI HAY: REGRESARLA A POSICIÓN ORIGINAL  Y luego cambiar nueva
+                                                    if (enhusillo == 1) {
+
+                                                        // cambio posicion original.
+
+
+                                                        // ROTAR EN TABLA
+                                                        var HttpClient = function() {
+
+                                                            this.get = function(aUrl, aCallback) {
+                                                                var anHttpRequest = new XMLHttpRequest();
+                                                                anHttpRequest.onreadystatechange = function() {
+                                                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                        aCallback(anHttpRequest.responseText);
+                                                                }
+                                                                anHttpRequest.open("GET", aUrl, true);
+                                                                anHttpRequest.send(null);
+                                                            }
+                                                        }
+                                                        var theurl = 'http://192.168.0.98/rotarcar/' + valortoolenhusillo;
+                                                        var client = new HttpClient();
+                                                        client.get(theurl, function(response) {
+
+                                                            // CAMBIAR EN TABLA
+                                                            var HttpClient = function() {
+
+                                                                this.get = function(aUrl, aCallback) {
+                                                                    var anHttpRequest = new XMLHttpRequest();
+                                                                    anHttpRequest.onreadystatechange = function() {
+                                                                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                            aCallback(anHttpRequest.responseText);
+                                                                    }
+                                                                    anHttpRequest.open("GET", aUrl, true);
+                                                                    anHttpRequest.send(null);
+                                                                }
+                                                            }
+                                                            var theurl = 'http://192.168.0.98/cambiobrazomodop';
+                                                            var client = new HttpClient();
+                                                            client.get(theurl, function(response) {});
+
+                                                        });
+
+                                                        //Mandar a hacer el cambio real
+
+                                                        cmd = "X" + valortoolenhusillo + ";" + obj[indexherenhusillo]['longitud'];
+                                                        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd);
+
+
+                                                        var HttpClient = function() {
+
+                                                            this.get = function(aUrl, aCallback) {
+                                                                var anHttpRequest = new XMLHttpRequest();
+                                                                anHttpRequest.onreadystatechange = function() {
+                                                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                        aCallback(anHttpRequest.responseText);
+                                                                }
+                                                                anHttpRequest.open("GET", aUrl, true);
+                                                                anHttpRequest.send(null);
+                                                            }
+                                                        }
+                                                        var theurl = 'http://192.168.0.98/sigherramienta/' + toolausar;
+                                                        var client = new HttpClient();
+                                                        client.get(theurl, function(response) {});
+
+                                                        /* ESTO TENDRIA QUE IR EN EL FINAL De la cadena de X.
+
+                                                        setTimeout( function(){
+                                                          
+                                                          
+                                                              var HttpClient = function () {
+                                                                          
+                                                                          this.get = function (aUrl, aCallback) {
+                                                                  var anHttpRequest = new XMLHttpRequest();
+                                                                  anHttpRequest.onreadystatechange = function () {
+                                                                  if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                  aCallback(anHttpRequest.responseText);
+                                                                  }
+                                                                  anHttpRequest.open("GET", aUrl, true);
+                                                                  anHttpRequest.send(null);
+                                                                  }
+                                                                  }
+                                                                  var theurl = 'http://192.168.0.98/rotarcar/'+toolausar;
+                                                                  var client = new HttpClient();
+                                                                  client.get(theurl, function (response) {
+                                                                      var HttpClient = function () {
+                                                                          
+                                                                          this.get = function (aUrl, aCallback) {
+                                                                  var anHttpRequest = new XMLHttpRequest();
+                                                                  anHttpRequest.onreadystatechange = function () {
+                                                                  if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                  aCallback(anHttpRequest.responseText);
+                                                                  }
+                                                                  anHttpRequest.open("GET", aUrl, true);
+                                                                  anHttpRequest.send(null);
+                                                                  }
+                                                                  }
+                                                                  var theurl = 'http://192.168.0.98/cambiobrazomodop';
+                                                                  var client = new HttpClient();
+                                                                  client.get(theurl, function (response) {
+                                                                  });
+                                                                  });
+                                                          
+                                                                  // CAMBIAR EN TABLA
+                                                          
+
+                                                          //Cambiar real.
+                                                              cmd = "x"+toolausar+";"+obj[(toolausar-1)]['longitud'];
+                                                          chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
+
+                                                          },7000);
+                                                          */
+
+                                                    }
+                                                }
+                                                // Si la herramienta en el husillo es la herramienta que se pidió.
+                                                else {
+
+                                                    alert("NO HAY EN HUSILLO");
+
+                                                    var HttpClient = function() {
+
+                                                        this.get = function(aUrl, aCallback) {
+                                                            var anHttpRequest = new XMLHttpRequest();
+                                                            anHttpRequest.onreadystatechange = function() {
+                                                                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                    aCallback(anHttpRequest.responseText);
+                                                            }
+                                                            anHttpRequest.open("GET", aUrl, true);
+                                                            anHttpRequest.send(null);
+                                                        }
+                                                    }
+                                                    var theurl = 'http://192.168.0.98/rotarcar/' + toolausar;
+                                                    var client = new HttpClient();
+                                                    client.get(theurl, function(response) {
+
+                                                        // CAMBIAR EN TABLA
+                                                        var HttpClient = function() {
+
+                                                            this.get = function(aUrl, aCallback) {
+                                                                var anHttpRequest = new XMLHttpRequest();
+                                                                anHttpRequest.onreadystatechange = function() {
+                                                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                                                        aCallback(anHttpRequest.responseText);
+                                                                }
+                                                                anHttpRequest.open("GET", aUrl, true);
+                                                                anHttpRequest.send(null);
+                                                            }
+                                                        }
+                                                        var theurl = 'http://192.168.0.98/cambiobrazomodop';
+                                                        var client = new HttpClient();
+                                                        client.get(theurl, function(response) {});
+
+                                                    });
+
+                                                    cmd = "x" + toolausar + ";" + obj[(toolausar - 1)]['longitud'];
+                                                    chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd);
+
+                                                }
+
+                                            }
+
+                                        });
+
+
+
+
+
+
+
+                                        //TERMINA CH
+
+
+
+
+
+
+                                    } else {
+
+                                        alert("Debe bloquear las válvula del carrusel para poder moverlo.");
+
+                                    }
+
+
+
+                                });
+                            } else {
+                                alert("El husillo sigue girando.")
+                            }
                         });
-                
-                        });
-                
-                     //Mandar a hacer el cambio real
-                
-                    cmd = "X"+valortoolenhusillo+";"+obj[indexherenhusillo]['longitud'];
-                chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
-
-
-                var HttpClient = function () {
-                                
-                                this.get = function (aUrl, aCallback) {
-                        var anHttpRequest = new XMLHttpRequest();
-                        anHttpRequest.onreadystatechange = function () {
-                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                        aCallback(anHttpRequest.responseText);
-                        }
-                        anHttpRequest.open("GET", aUrl, true);
-                        anHttpRequest.send(null);
-                        }
-                        }
-                        var theurl = 'http://192.168.0.98/sigherramienta/'+toolausar;
-                        var client = new HttpClient();
-                        client.get(theurl, function (response) {
-                        });
-                
-              /* ESTO TENDRIA QUE IR EN EL FINAL De la cadena de X.
-
-              setTimeout( function(){
-                
-                
-                    var HttpClient = function () {
-                                
-                                this.get = function (aUrl, aCallback) {
-                        var anHttpRequest = new XMLHttpRequest();
-                        anHttpRequest.onreadystatechange = function () {
-                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                        aCallback(anHttpRequest.responseText);
-                        }
-                        anHttpRequest.open("GET", aUrl, true);
-                        anHttpRequest.send(null);
-                        }
-                        }
-                        var theurl = 'http://192.168.0.98/rotarcar/'+toolausar;
-                        var client = new HttpClient();
-                        client.get(theurl, function (response) {
-                            var HttpClient = function () {
-                                
-                                this.get = function (aUrl, aCallback) {
-                        var anHttpRequest = new XMLHttpRequest();
-                        anHttpRequest.onreadystatechange = function () {
-                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                        aCallback(anHttpRequest.responseText);
-                        }
-                        anHttpRequest.open("GET", aUrl, true);
-                        anHttpRequest.send(null);
-                        }
-                        }
-                        var theurl = 'http://192.168.0.98/cambiobrazomodop';
-                        var client = new HttpClient();
-                        client.get(theurl, function (response) {
-                        });
-                        });
-                
-                        // CAMBIAR EN TABLA
-                
-
-                //Cambiar real.
-                    cmd = "x"+toolausar+";"+obj[(toolausar-1)]['longitud'];
-                chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
-
-                },7000);
-                */
-                
-                 }
-                }
-                 // Si la herramienta en el husillo es la herramienta que se pidió.
-                 else{
-                
-                alert("NO HAY EN HUSILLO");
-                
-                    var HttpClient = function () {
-                                
-                                this.get = function (aUrl, aCallback) {
-                        var anHttpRequest = new XMLHttpRequest();
-                        anHttpRequest.onreadystatechange = function () {
-                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                        aCallback(anHttpRequest.responseText);
-                        }
-                        anHttpRequest.open("GET", aUrl, true);
-                        anHttpRequest.send(null);
-                        }
-                        }
-                        var theurl = 'http://192.168.0.98/rotarcar/'+toolausar;
-                        var client = new HttpClient();
-                        client.get(theurl, function (response) {
-                
-                           // CAMBIAR EN TABLA
-                           var HttpClient = function () {
-                                
-                                this.get = function (aUrl, aCallback) {
-                        var anHttpRequest = new XMLHttpRequest();
-                        anHttpRequest.onreadystatechange = function () {
-                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                        aCallback(anHttpRequest.responseText);
-                        }
-                        anHttpRequest.open("GET", aUrl, true);
-                        anHttpRequest.send(null);
-                        }
-                        }
-                        var theurl = 'http://192.168.0.98/cambiobrazomodop';
-                        var client = new HttpClient();
-                        client.get(theurl, function (response) {
-                        });
-                        
-                        });
-                
-                    cmd = "x"+toolausar+";"+obj[(toolausar-1)]['longitud'];
-                chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 " + cmd );
-                
-                 }
-                
-                    }
-                
-                });
-                
-
-
-
-
-
-
-//TERMINA CH
-
-
-
-
-
-
-}
-else{
-
-alert("Debe bloquear las válvula del carrusel para poder moverlo.");
-
-}
-
-
-
-                    }   
-                    );
-                }
-                else{
-                    alert("El husillo sigue girando.")
-                }
-            });
                     });
 
-                    
+
                     /***FIN CAMBIO H*/
 
 
@@ -1110,126 +1082,126 @@ alert("Debe bloquear las válvula del carrusel para poder moverlo.");
 
 
                     $('#' + this.id + ' .btn-guardarherramientas').click(function() {
-                          
-var url = "http://192.168.0.98/actualizarh/";
 
-url = url.concat(document.getElementById("herramientah1").value);
-url = url.concat("&");
+                        var url = "http://192.168.0.98/actualizarh/";
 
-url = url.concat(document.getElementById("longitudh1").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("diametroh1").value);
-url = url.concat("&");
+                        url = url.concat(document.getElementById("herramientah1").value);
+                        url = url.concat("&");
 
-url = url.concat(document.getElementById("herramientah2").value);
+                        url = url.concat(document.getElementById("longitudh1").value);
+                        url = url.concat("&");
+                        url = url.concat("0.0");
+                        url = url.concat("&");
 
-url = url.concat("&");
-url = url.concat(document.getElementById("longitudh2").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("diametroh2").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("herramientah3").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("longitudh3").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("diametroh3").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("herramientah4").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("longitudh4").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("diametroh4").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("herramientah5").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("longitudh5").value);
-url = url.concat("&");
-url = url.concat(document.getElementById("diametroh5").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah6").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh6").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh6").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah7").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh7").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh7").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah8").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh8").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh8").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah9").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh9").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh9").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah10").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh10").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh10").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah11").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh11").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh11").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah12").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh12").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh12").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah13").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh13").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh13").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah14").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh14").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh14").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah15").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh15").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh15").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah16").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh16").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh16").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah17").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh17").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh17").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("herramientah18").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("longitudh18").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("diametroh18").value);
-url = url.concat("/");
-url = url.concat(document.getElementById("modoh").checked);
+                        url = url.concat(document.getElementById("herramientah2").value);
 
-var HttpClient = function () {
-              this.get = function (aUrl, aCallback) {
+                        url = url.concat("&");
+                        url = url.concat(document.getElementById("longitudh2").value);
+                        url = url.concat("&");
+                        url = url.concat("0.0");
+                        url = url.concat("&");
+                        url = url.concat(document.getElementById("herramientah3").value);
+                        url = url.concat("&");
+                        url = url.concat(document.getElementById("longitudh3").value);
+                        url = url.concat("&");
+                        url = url.concat("0.0");
+                        url = url.concat("&");
+                        url = url.concat(document.getElementById("herramientah4").value);
+                        url = url.concat("&");
+                        url = url.concat(document.getElementById("longitudh4").value);
+                        url = url.concat("&");
+                        url = url.concat("0.0");
+                        url = url.concat("&");
+                        url = url.concat(document.getElementById("herramientah5").value);
+                        url = url.concat("&");
+                        url = url.concat(document.getElementById("longitudh5").value);
+                        url = url.concat("&");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah6").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh6").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah7").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh7").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah8").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh8").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah9").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh9").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah10").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh10").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah11").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh11").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah12").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh12").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah13").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh13").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah14").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh14").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah15").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh15").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah16").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh16").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah17").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh17").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("herramientah18").value);
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("longitudh18").value);
+                        url = url.concat("/");
+                        url = url.concat("0.0");
+                        url = url.concat("/");
+                        url = url.concat(document.getElementById("modoh").checked);
+
+                        var HttpClient = function() {
+                            this.get = function(aUrl, aCallback) {
                                 var anHttpRequest = new XMLHttpRequest();
-                                anHttpRequest.onreadystatechange = function () {
+                                anHttpRequest.onreadystatechange = function() {
                                     if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
                                         aCallback(anHttpRequest.responseText);
                                 }
@@ -1238,264 +1210,235 @@ var HttpClient = function () {
                             }
                         }
 
-var client = new HttpClient();
-                        client.get(url, function (response) {
+                        var client = new HttpClient();
+                        client.get(url, function(response) {
                             alert("valores guardados");
                         });
 
-            });
-
-                
+                    });
 
 
 
-            $('#' + this.id + ' .btn-cargarherramientas').click(function() {
-
-                var HttpClient = function() {
-                  this.get = function(aUrl, aCallback) {
-                      var anHttpRequest = new XMLHttpRequest();
-                      anHttpRequest.onreadystatechange = function() {
-                          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                              aCallback(anHttpRequest.responseText);
-                      }
-                      anHttpRequest.open("GET", aUrl, true);
-                      anHttpRequest.send(null);
-                  }
-              }
-              var theurl = 'http://192.168.0.98/geth';
-              var client = new HttpClient();
-              client.get(theurl, function(response) {
-    var obj = JSON.parse(response);
-           
-    document.getElementById("herramientah1").selectedIndex = (parseInt(obj[0]['herramienta'])-1);
-    document.getElementById("longitudh1").value = obj[0]['longitud'];
-    document.getElementById("diametroh1").value = obj[0]['diametro'];
-    document.getElementById("modoh").checked = obj[0]['modoh'];
-
-    document.getElementById("herramientah2").selectedIndex = (parseInt(obj[1]['herramienta'])-1);
-    document.getElementById("longitudh2").value = obj[1]['longitud'];
-    document.getElementById("diametroh2").value = obj[1]['diametro'];
-
-    document.getElementById("herramientah3").selectedIndex = (parseInt(obj[2]['herramienta'])-1);
-    document.getElementById("longitudh3").value = obj[2]['longitud'];
-    document.getElementById("diametroh3").value = obj[2]['diametro'];
 
 
-    document.getElementById("herramientah4").selectedIndex = (parseInt(obj[3]['herramienta'])-1);
-    document.getElementById("longitudh4").value = obj[3]['longitud'];
-    document.getElementById("diametroh4").value = obj[3]['diametro'];
+                    $('#' + this.id + ' .btn-cargarherramientas').click(function() {
 
-    
-    document.getElementById("herramientah5").selectedIndex = (parseInt(obj[4]['herramienta'])-1);
-    document.getElementById("longitudh5").value = obj[4]['longitud'];
-    document.getElementById("diametroh5").value = obj[4]['diametro'];
+                        var HttpClient = function() {
+                            this.get = function(aUrl, aCallback) {
+                                var anHttpRequest = new XMLHttpRequest();
+                                anHttpRequest.onreadystatechange = function() {
+                                    if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                                        aCallback(anHttpRequest.responseText);
+                                }
+                                anHttpRequest.open("GET", aUrl, true);
+                                anHttpRequest.send(null);
+                            }
+                        }
+                        var theurl = 'http://192.168.0.98/geth';
+                        var client = new HttpClient();
+                        client.get(theurl, function(response) {
+                            var obj = JSON.parse(response);
 
-    
-    document.getElementById("herramientah6").selectedIndex = (parseInt(obj[5]['herramienta'])-1);
-    document.getElementById("longitudh6").value = obj[5]['longitud'];
-    document.getElementById("diametroh6").value = obj[5]['diametro'];
+                            document.getElementById("herramientah1").selectedIndex = (parseInt(obj[0]['herramienta']) - 1);
+                            document.getElementById("longitudh1").value = obj[0]['longitud'];
+                            document.getElementById("modoh").checked = obj[0]['modoh'];
 
-    
-    document.getElementById("herramientah7").selectedIndex = (parseInt(obj[6]['herramienta'])-1);
-    document.getElementById("longitudh7").value = obj[6]['longitud'];
-    document.getElementById("diametroh7").value = obj[6]['diametro'];
+                            document.getElementById("herramientah2").selectedIndex = (parseInt(obj[1]['herramienta']) - 1);
+                            document.getElementById("longitudh2").value = obj[1]['longitud'];
 
-    document.getElementById("herramientah8").selectedIndex = (parseInt(obj[7]['herramienta'])-1);
-    document.getElementById("longitudh8").value = obj[7]['longitud'];
-    document.getElementById("diametroh8").value = obj[7]['diametro'];
+                            document.getElementById("herramientah3").selectedIndex = (parseInt(obj[2]['herramienta']) - 1);
+                            document.getElementById("longitudh3").value = obj[2]['longitud'];
 
-    document.getElementById("herramientah9").selectedIndex = (parseInt(obj[8]['herramienta'])-1);
-    document.getElementById("longitudh9").value = obj[8]['longitud'];
-    document.getElementById("diametroh9").value = obj[8]['diametro'];
 
-    document.getElementById("herramientah10").selectedIndex = (parseInt(obj[9]['herramienta'])-1);
-    document.getElementById("longitudh10").value = obj[9]['longitud'];
-    document.getElementById("diametroh10").value = obj[9]['diametro'];
+                            document.getElementById("herramientah4").selectedIndex = (parseInt(obj[3]['herramienta']) - 1);
+                            document.getElementById("longitudh4").value = obj[3]['longitud'];
 
-    document.getElementById("herramientah11").selectedIndex = (parseInt(obj[10]['herramienta'])-1);
-    document.getElementById("longitudh11").value = obj[10]['longitud'];
-    document.getElementById("diametroh11").value = obj[10]['diametro'];
 
-    document.getElementById("herramientah12").selectedIndex = (parseInt(obj[11]['herramienta'])-1);
-    document.getElementById("longitudh12").value = obj[11]['longitud'];
-    document.getElementById("diametroh12").value = obj[11]['diametro'];
+                            document.getElementById("herramientah5").selectedIndex = (parseInt(obj[4]['herramienta']) - 1);
+                            document.getElementById("longitudh5").value = obj[4]['longitud'];
 
-    document.getElementById("herramientah13").selectedIndex = (parseInt(obj[12]['herramienta'])-1);
-    document.getElementById("longitudh13").value = obj[12]['longitud'];
-    document.getElementById("diametroh13").value = obj[12]['diametro'];
 
-    document.getElementById("herramientah14").selectedIndex = (parseInt(obj[13]['herramienta'])-1);
-    document.getElementById("longitudh14").value = obj[13]['longitud'];
-    document.getElementById("diametroh14").value = obj[13]['diametro'];
+                            document.getElementById("herramientah6").selectedIndex = (parseInt(obj[5]['herramienta']) - 1);
+                            document.getElementById("longitudh6").value = obj[5]['longitud'];
 
-    document.getElementById("herramientah15").selectedIndex = (parseInt(obj[14]['herramienta'])-1);
-    document.getElementById("longitudh15").value = obj[14]['longitud'];
-    document.getElementById("diametroh15").value = obj[14]['diametro'];
 
-    document.getElementById("herramientah16").selectedIndex = (parseInt(obj[15]['herramienta'])-1);
-    document.getElementById("longitudh16").value = obj[15]['longitud'];
-    document.getElementById("diametroh16").value = obj[15]['diametro'];
+                            document.getElementById("herramientah7").selectedIndex = (parseInt(obj[6]['herramienta']) - 1);
+                            document.getElementById("longitudh7").value = obj[6]['longitud'];
 
-    document.getElementById("herramientah17").selectedIndex = (parseInt(obj[16]['herramienta'])-1);
-    document.getElementById("longitudh17").value = obj[16]['longitud'];
-    document.getElementById("diametroh17").value = obj[16]['diametro'];
+                            document.getElementById("herramientah8").selectedIndex = (parseInt(obj[7]['herramienta']) - 1);
+                            document.getElementById("longitudh8").value = obj[7]['longitud'];
 
-    document.getElementById("herramientah18").selectedIndex = (parseInt(obj[17]['herramienta'])-1);
-    document.getElementById("longitudh18").value = obj[17]['longitud'];
-    document.getElementById("diametroh18").value = obj[17]['diametro'];
+                            document.getElementById("herramientah9").selectedIndex = (parseInt(obj[8]['herramienta']) - 1);
+                            document.getElementById("longitudh9").value = obj[8]['longitud'];
 
-    
-});
+                            document.getElementById("herramientah10").selectedIndex = (parseInt(obj[9]['herramienta']) - 1);
+                            document.getElementById("longitudh10").value = obj[9]['longitud'];
 
-            });
-            // Init Hello World 2 button on Tab 1. Notice the use
-            // of the slick .bind(this) technique to correctly set "this"
-            // when the callback is called
-         
-            $('#clearInstructions').click(this.onClearInstructionsClick.bind(this));
-            $('.select-pocket').change(this.onSelectPocket.bind(this));
-            
-            this.selectCurrentPocket();
-            
-             $('#brazo').click(this.onChangeBrazo.bind(this));
-             $('#carusel').click(this.onChangeCarusel.bind(this));
-             $('#husillo').click(this.onChangeHusillo.bind(this));
+                            document.getElementById("herramientah11").selectedIndex = (parseInt(obj[10]['herramienta']) - 1);
+                            document.getElementById("longitudh11").value = obj[10]['longitud'];
+
+                            document.getElementById("herramientah12").selectedIndex = (parseInt(obj[11]['herramienta']) - 1);
+                            document.getElementById("longitudh12").value = obj[11]['longitud'];
+
+                            document.getElementById("herramientah13").selectedIndex = (parseInt(obj[12]['herramienta']) - 1);
+                            document.getElementById("longitudh13").value = obj[12]['longitud'];
+
+                            document.getElementById("herramientah14").selectedIndex = (parseInt(obj[13]['herramienta']) - 1);
+                            document.getElementById("longitudh14").value = obj[13]['longitud'];
+
+                            document.getElementById("herramientah15").selectedIndex = (parseInt(obj[14]['herramienta']) - 1);
+                            document.getElementById("longitudh15").value = obj[14]['longitud'];
+
+                            document.getElementById("herramientah16").selectedIndex = (parseInt(obj[15]['herramienta']) - 1);
+                            document.getElementById("longitudh16").value = obj[15]['longitud'];
+
+                            document.getElementById("herramientah17").selectedIndex = (parseInt(obj[16]['herramienta']) - 1);
+                            document.getElementById("longitudh17").value = obj[16]['longitud'];
+
+                            document.getElementById("herramientah18").selectedIndex = (parseInt(obj[17]['herramienta']) - 1);
+                            document.getElementById("longitudh18").value = obj[17]['longitud'];
+
+
+                        });
+
+                    });
+                    // Init Hello World 2 button on Tab 1. Notice the use
+                    // of the slick .bind(this) technique to correctly set "this"
+                    // when the callback is called
+
+                    $('#clearInstructions').click(this.onClearInstructionsClick.bind(this));
+                    $('.select-pocket').change(this.onSelectPocket.bind(this));
+
+                    this.selectCurrentPocket();
+
+                    $('#brazo').click(this.onChangeBrazo.bind(this));
+                    $('#carusel').click(this.onChangeCarusel.bind(this));
+                    $('#husillo').click(this.onChangeHusillo.bind(this));
                 },
-              
+
                 /**
                  * onHelloBtnClick is an example of a button click event callback
                  */
 
-            
-
-selectCurrentPocket: function(){
-var lastSel = $(".select-pocket option:selected").val();
-localStorage.setItem('last-pocket', lastSel);  
-},
-onClearInstructionsClick: function(evt){
-
-$("#plc-console").html("");
-chilipeppr.publish(
-    "/com-chilipeppr-elem-flashmsg/flashmsg",
-    "PLC Instructions",
-    "PLC Instructions Cleared.",
-    2000
-);
-},
-onSelectPocket: function(evt){
-var pocket = $(".select-pocket").val();
-
-var sensor_status = localStorage.getItem('sensor_status');
-if(typeof sensor_status != 'undefined')
-{
-    var sensor_status = JSON.parse(sensor_status);
-    
-    if(sensor_status.brazo == 1 || sensor_status.husillo == 1 || sensor_status.carrusel == 1)
-    {
-        
-        var lastSel = localStorage.getItem('last-pocket');
-        $(".select-pocket").val(lastSel);
-        var msg = "";
-        msg += (sensor_status.brazo == 1) ? " Brazo "  : '';
-        msg += (sensor_status.husillo == 1) ? " Husillo " : '';
-        msg += (sensor_status.carrusel == 1) ? " Carrusel "  : '';
-        alert("Por favor revisar el estado de los sensores" + msg);
-    }
-    else
-    {
-        this.selectCurrentPocket();
-        chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 i" + pocket );			
-    }
-    
-}
-else
-{
-    alert("No se guardo el estado de los sensores por favor recarga la pagina de nuevo" + msg);
-}
 
 
-}
-,
-onChangeBrazo: function(evt){
-alert("brazo");
-var status = $('#brazo').attr('content');	
-var name = "#brazo";
-var cmd = (parseInt(status) == 1) ? 4 : 3;
-this.sendToPlc(name, cmd, parseInt(status));
-},
+                selectCurrentPocket: function() {
+                    var lastSel = $(".select-pocket option:selected").val();
+                    localStorage.setItem('last-pocket', lastSel);
+                },
+                onClearInstructionsClick: function(evt) {
 
-onChangeCarusel: function(evt){
+                    $("#plc-console").html("");
+                    chilipeppr.publish(
+                        "/com-chilipeppr-elem-flashmsg/flashmsg",
+                        "PLC Instructions",
+                        "PLC Instructions Cleared.",
+                        2000
+                    );
+                },
+                onSelectPocket: function(evt) {
+                    var pocket = $(".select-pocket").val();
 
-var status = $('#carusel').attr('content');	
-var name = "#carusel";
-var cmd = (parseInt(status) == 1) ? 2 : 1;
-this.sendToPlc(name, cmd, parseInt(status));
+                    var sensor_status = localStorage.getItem('sensor_status');
+                    if (typeof sensor_status != 'undefined') {
+                        var sensor_status = JSON.parse(sensor_status);
+
+                        if (sensor_status.brazo == 1 || sensor_status.husillo == 1 || sensor_status.carrusel == 1) {
+
+                            var lastSel = localStorage.getItem('last-pocket');
+                            $(".select-pocket").val(lastSel);
+                            var msg = "";
+                            msg += (sensor_status.brazo == 1) ? " Brazo " : '';
+                            msg += (sensor_status.husillo == 1) ? " Husillo " : '';
+                            msg += (sensor_status.carrusel == 1) ? " Carrusel " : '';
+                            alert("Por favor revisar el estado de los sensores" + msg);
+                        } else {
+                            this.selectCurrentPocket();
+                            chilipeppr.publish("/com-chilipeppr-widget-serialport/ws/send", "send COM4 i" + pocket);
+                        }
+
+                    } else {
+                        alert("No se guardo el estado de los sensores por favor recarga la pagina de nuevo" + msg);
+                    }
+
+
+                },
+                onChangeBrazo: function(evt) {
+                    alert("brazo");
+                    var status = $('#brazo').attr('content');
+                    var name = "#brazo";
+                    var cmd = (parseInt(status) == 1) ? 4 : 3;
+                    this.sendToPlc(name, cmd, parseInt(status));
+                },
+
+                onChangeCarusel: function(evt) {
+
+                    var status = $('#carusel').attr('content');
+                    var name = "#carusel";
+                    var cmd = (parseInt(status) == 1) ? 2 : 1;
+                    this.sendToPlc(name, cmd, parseInt(status));
 
 
 
-},
+                },
 
-onChangeHusillo: function(evt){
+                onChangeHusillo: function(evt) {
 
-var status = $('#husillo').attr('content');	
-var name = "#husillo";
-var cmd = (parseInt(status) == 1) ? 6 : 5;
+                    var status = $('#husillo').attr('content');
+                    var name = "#husillo";
+                    var cmd = (parseInt(status) == 1) ? 6 : 5;
 
-this.sendToPlc(name, cmd, parseInt(status));
+                    this.sendToPlc(name, cmd, parseInt(status));
 
-},
+                },
 
-sendToPlc: function(name , cmd, status){
-status = parseInt(status);
-$.ajax({
-url: 'http://192.168.0.97?cmd=' + cmd,
-method: 'GET'
-})
-.done(function(res){
-    chilipeppr.publish(
-        "/com-chilipeppr-elem-flashmsg/flashmsg",
-        "Change Status",
-        res,
-        2000
-    );
-   res = JSON.parse(res);
-    if(parseInt(res.status) == 1){
-        var newStatus = (status == 1) ? 0 : 1;
-        var newMessage = (status == 1) ? "Liberar " : "Contraer";
-        $(name + " span").html(newMessage);
-        $(name).attr('content', newStatus);
-        
-        if(name == '#carusel'){
-            var sensor_status = JSON.parse(localStorage.getItem('sensor_status'));
-            sensor_status.carrusel = newStatus;
-            if(newStatus == 1) $('.select-pocket').attr('disabled', 'disabled');
-            else $('.select-pocket').removeAttr('disabled');
-        }
-        else if(name == '#brazo')
-        {
-            var sensor_status = JSON.parse(localStorage.getItem('sensor_status'));
-            sensor_status.brazo = newStatus;
-        }
-        else
-        {
-            var sensor_status = JSON.parse(localStorage.getItem('sensor_status'));
-            sensor_status.husillo = newStatus;
-        }
-        localStorage.setItem('sensor_status', JSON.stringify(sensor_status));
-    } 
-})
-.fail(function(err){
-    chilipeppr.publish(
-        "/com-chilipeppr-elem-flashmsg/flashmsg",
-        "Change Status",
-        "ERROR EN LA COMUNICACION CON EL PLC",
-        2000
-    );
-});
-},
+                sendToPlc: function(name, cmd, status) {
+                    status = parseInt(status);
+                    $.ajax({
+                            url: 'http://192.168.0.97?cmd=' + cmd,
+                            method: 'GET'
+                        })
+                        .done(function(res) {
+                            chilipeppr.publish(
+                                "/com-chilipeppr-elem-flashmsg/flashmsg",
+                                "Change Status",
+                                res,
+                                2000
+                            );
+                            res = JSON.parse(res);
+                            if (parseInt(res.status) == 1) {
+                                var newStatus = (status == 1) ? 0 : 1;
+                                var newMessage = (status == 1) ? "Liberar " : "Contraer";
+                                $(name + " span").html(newMessage);
+                                $(name).attr('content', newStatus);
 
-      
-// BLOQUEAR PALETA IZQUIERDA
+                                if (name == '#carusel') {
+                                    var sensor_status = JSON.parse(localStorage.getItem('sensor_status'));
+                                    sensor_status.carrusel = newStatus;
+                                    if (newStatus == 1) $('.select-pocket').attr('disabled', 'disabled');
+                                    else $('.select-pocket').removeAttr('disabled');
+                                } else if (name == '#brazo') {
+                                    var sensor_status = JSON.parse(localStorage.getItem('sensor_status'));
+                                    sensor_status.brazo = newStatus;
+                                } else {
+                                    var sensor_status = JSON.parse(localStorage.getItem('sensor_status'));
+                                    sensor_status.husillo = newStatus;
+                                }
+                                localStorage.setItem('sensor_status', JSON.stringify(sensor_status));
+                            }
+                        })
+                        .fail(function(err) {
+                            chilipeppr.publish(
+                                "/com-chilipeppr-elem-flashmsg/flashmsg",
+                                "Change Status",
+                                "ERROR EN LA COMUNICACION CON EL PLC",
+                                2000
+                            );
+                        });
+                },
+
+
+                // BLOQUEAR PALETA IZQUIERDA
 
 
                 /**
@@ -1509,7 +1452,7 @@ method: 'GET'
                  * stored settings from localStorage and then adjust the UI to reflect
                  * what the user wants.
                  */
-                setupUiFromLocalStorage: function () {
+                setupUiFromLocalStorage: function() {
 
                     // Read vals from localStorage. Make sure to use a unique
                     // key specific to this widget so as not to overwrite other
@@ -1524,8 +1467,7 @@ method: 'GET'
                     if (options) {
                         options = $.parseJSON(options);
                         console.log("just evaled options: ", options);
-                    }
-                    else {
+                    } else {
                         options = {
                             showBody: true,
                             tabShowing: 1,
@@ -1540,8 +1482,7 @@ method: 'GET'
                     // show/hide body
                     if (options.showBody) {
                         this.showBody();
-                    }
-                    else {
+                    } else {
                         this.hideBody();
                     }
 
@@ -1551,7 +1492,7 @@ method: 'GET'
                  * should call this method immediately so that on next load the value
                  * is correctly set.
                  */
-                saveOptionsLocalStorage: function () {
+                saveOptionsLocalStorage: function() {
                     // You can add your own values to this.options to store them
                     // along with some of the normal stuff like showBody
                     var options = this.options;
@@ -1569,7 +1510,7 @@ method: 'GET'
                  * value in we don't store the preference because it was likely code 
                  * that sent in the param.
                  */
-                showBody: function (evt) {
+                showBody: function(evt) {
                     $('#' + this.id + ' .panel-body').removeClass('hidden');
                     $('#' + this.id + ' .panel-footer').removeClass('hidden');
                     $('#' + this.id + ' .hidebody span').addClass('glyphicon-chevron-up');
@@ -1590,7 +1531,7 @@ method: 'GET'
                  * value in we don't store the preference because it was likely code 
                  * that sent in the param.
                  */
-                hideBody: function (evt) {
+                hideBody: function(evt) {
                     $('#' + this.id + ' .panel-body').addClass('hidden');
                     $('#' + this.id + ' .panel-footer').addClass('hidden');
                     $('#' + this.id + ' .hidebody span').removeClass('glyphicon-chevron-up');
@@ -1616,7 +1557,7 @@ method: 'GET'
                  * which creates the full pulldown menu for us and attaches the click
                  * events.
                  */
-                forkSetup: function () {
+                forkSetup: function() {
                     var topCssSelector = '#' + this.id;
 
                     $(topCssSelector + ' .panel-title').popover({
@@ -1630,8 +1571,8 @@ method: 'GET'
                     });
 
                     var that = this;
-                    chilipeppr.load("http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html", function () {
-                        require(['inline:com-chilipeppr-elem-pubsubviewer'], function (pubsubviewer) {
+                    chilipeppr.load("http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html", function() {
+                        require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
                             pubsubviewer.attachTo($(topCssSelector + ' .panel-heading .dropdown-menu'), that);
                         });
                     });
@@ -1640,7 +1581,7 @@ method: 'GET'
 
             }
         });
-    //]]>
+        //]]>
     </script>
 
 </head>
@@ -1658,14 +1599,12 @@ method: 'GET'
                 </div>
                 <div class="btn-group">
                     <div class="dropdown">
-                        <button type="button" class="btn btn-xs btn-default dropdown-toggle"
-                            data-toggle="dropdown"><span class="caret"></span>
+                        <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
                     </div>
                 </div>
-            </div> <span class="panel-title" data-toggle="popover">Herramientas</span> <span style="font-size:9px;"
-                class="fb-build">v10.5</span>
+            </div> <span class="panel-title" data-toggle="popover">Herramientas</span> <span style="font-size:9px;" class="fb-build">v10.5</span>
 
         </div>
         <div class="panel-body">
@@ -1675,44 +1614,42 @@ method: 'GET'
                 </li>
                 <li><a href="#com-chilipeppr-widget-ch-tab2" role="tab" data-toggle="tab">Controles Manuales</a>
                 </li>
-                
+
             </ul>
             <!-- Tab panes -->
 
             <div class="tab-content">
-                
+
                 <!-- Tab 1 -->
                 <div class="tab-pane active" id="com-chilipeppr-widget-ch-tab1">
 
-                    
 
-<div style="text-align:center">
-                    <br>
-                    <button type="button" class="btn btn-xs btn-default btn-cargarherramientas"
-                    style="margin: 4px 0; background-color: yellow " id="cargarherramientas">CARGAR OPCIONES DE HERRAMIENTAS</button>
-                    <br>
-                   
-                    <br>
-                    <button type="button" class="btn btn-xs btn-default btn-guardarherramientas"
-                    style="margin: 4px 0; background-color: greenyellow " id="guardarherramientas">GUARDAR OPCIONES DE HERRAMIENTAS</button>
-                    <br>
-                    <br>
-                    <br>
-                </div>
+
+                    <div style="text-align:center">
+                        <br>
+                        <button type="button" class="btn btn-xs btn-default btn-cargarherramientas" style="margin: 4px 0; background-color: yellow " id="cargarherramientas">CARGAR OPCIONES DE HERRAMIENTAS</button>
+                        <br>
+
+                        <br>
+                        <button type="button" class="btn btn-xs btn-default btn-guardarherramientas" style="margin: 4px 0; background-color: greenyellow " id="guardarherramientas">GUARDAR OPCIONES DE HERRAMIENTAS</button>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
                     <div class="" style="text-align:center">
                         <b>Tabla de Herramientas</b>
                     </div>
                     <br>
-                    <div style= "text-align:right"><input type="checkbox" id="modoh" value="1"> Modo Seguir Herramienta </div><br>
+                    <div style="text-align:right"><input type="checkbox" id="modoh" value="1"> Modo Seguir Herramienta </div><br>
 
                     <table style="width:100%">
                         <tr>
                             <th><b>Pocket 1</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah1" id="herramientah1">
+                            <td><select class="form-control" name="herramientah1" id="herramientah1">
                                 <option value="1" selected="selected">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -1731,27 +1668,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh1"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh1"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh1"></td>
-                        </tr>
+
+
 
                         <tr>
                             <th><b>Pocket 2</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah2" id="herramientah2">
+                            <td><select class="form-control" name="herramientah2" id="herramientah2">
                                 <option value="1">1</option>
                                 <option value="2" selected="selected">2</option>
                                 <option value="3">3</option>
@@ -1770,27 +1704,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh2"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh2"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh2"></td>
-                        </tr>
+
+
 
                         <tr>
                             <th><b>Pocket 3</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah3" id="herramientah3">
+                            <td><select class="form-control" name="herramientah3" id="herramientah3">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3" selected="selected">3</option>
@@ -1809,27 +1740,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh3"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh3"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh3"></td>
-                        </tr>
+
+
 
                         <tr>
                             <th><b>Pocket 4</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah4" id="herramientah4">
+                            <td><select class="form-control" name="herramientah4" id="herramientah4">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -1848,28 +1776,25 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh4"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh4"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh4"></td>
-                        </tr>
+
+
 
 
                         <tr>
                             <th><b>Pocket 5</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah5" id="herramientah5">
+                            <td><select class="form-control" name="herramientah5" id="herramientah5">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -1888,28 +1813,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh5"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh5"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh5"></td>
-                        </tr>
+
 
 
                         <tr>
                             <th><b>Pocket 6</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah6" id="herramientah6">
+                            <td><select class="form-control" name="herramientah6" id="herramientah6">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -1928,28 +1849,25 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh6"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh6"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh6"></td>
-                        </tr>
+
+
 
 
                         <tr>
                             <th><b>Pocket 7</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah7" id="herramientah7">
+                            <td><select class="form-control" name="herramientah7" id="herramientah7">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -1968,27 +1886,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh7"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh7"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh7"></td>
-                        </tr>
+
+
 
                         <tr>
                             <th><b>Pocket 8</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah8" id="herramientah8">
+                            <td><select class="form-control" name="herramientah8" id="herramientah8">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2007,26 +1922,23 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh8"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh8"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh8"></td>
-                        </tr>
+
+
                         <tr>
                             <th><b>Pocket 9</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah9" id="herramientah9">
+                            <td><select class="form-control" name="herramientah9" id="herramientah9">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2045,27 +1957,23 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh9"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh9"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh9"></td>
-                        </tr>
+
 
                         <tr>
                             <th><b>Pocket 10</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah10" id="herramientah10">
+                            <td><select class="form-control" name="herramientah10" id="herramientah10">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2084,28 +1992,25 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh10"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh10"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh10"></td>
-                        </tr>
+
+
 
 
                         <tr>
                             <th><b>Pocket 11</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah11" id="herramientah11">
+                            <td><select class="form-control" name="herramientah11" id="herramientah11">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2124,28 +2029,25 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh11"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh11"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh11"></td>
-                        </tr>
+
+
 
 
                         <tr>
                             <th><b>Pocket 12</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah12" id="herramientah12">
+                            <td><select class="form-control" name="herramientah12" id="herramientah12">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2164,27 +2066,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh12"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh12"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh12"></td>
-                        </tr>
+
+
 
                         <tr>
                             <th><b>Pocket 13</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah13" id="herramientah13">
+                            <td><select class="form-control" name="herramientah13" id="herramientah13">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2203,28 +2102,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh13"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh13"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh13"></td>
-                        </tr>
+
 
 
                         <tr>
                             <th><b>Pocket 14</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah14" id="herramientah14">
+                            <td><select class="form-control" name="herramientah14" id="herramientah14">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2243,27 +2138,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh14"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh14"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh14"></td>
-                        </tr>
+
+
 
                         <tr>
                             <th><b>Pocket 15</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah15" id="herramientah15">
+                            <td><select class="form-control" name="herramientah15" id="herramientah15">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2282,27 +2174,23 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh15"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh15"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh15"></td>
-                        </tr>
+
 
                         <tr>
                             <th><b>Pocket 16</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah16" id="herramientah16">
+                            <td><select class="form-control" name="herramientah16" id="herramientah16">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2321,28 +2209,23 @@ method: 'GET'
                                 <option value="16" selected="selected">16</option>
                                 <option value="17">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh16"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh16"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh16"></td>
-                        </tr>
 
 
                         <tr>
                             <th><b>Pocket 17</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah17" id="herramientah17">
+                            <td><select class="form-control" name="herramientah17" id="herramientah17">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2361,27 +2244,24 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17" selected="selected">17</option>
                                 <option value="18">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh17"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh17"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh17"></td>
-                        </tr>
+
+
 
                         <tr>
                             <th><b>Pocket 18</b></th>
-                           
+
                         </tr>
                         <tr>
                             <td>Herramienta</td>
-                           <td><select class="form-control" name="herramientah18" id="herramientah18">
+                            <td><select class="form-control" name="herramientah18" id="herramientah18">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -2400,19 +2280,15 @@ method: 'GET'
                                 <option value="16">16</option>
                                 <option value="17">17</option>
                                 <option value="18" selected="selected">18</option>
-                              </select></td> 
+                              </select></td>
                         </tr>
 
                         <tr>
                             <td>Longitud (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="longitudh18"></td>
+                            <td> <input type="number" value="0.00" step="0.01" id="longitudh18"></td>
                         </tr>
 
-                       
-                        <tr>
-                            <td>Diámetro (mm)</td>
-                           <td> <input type="number"value="0.00" step="0.01" id="diametroh18"></td>
-                        </tr>
+
 
 
 
@@ -2424,8 +2300,8 @@ method: 'GET'
 
                 <!-- Tab 2 -->
                 <div class="tab-pane" id="com-chilipeppr-widget-ch-tab2">
-                    
-                        <br><br>
+
+                    <br><br>
                     <div class="" style="text-align:center">
                         <b>Válvula Carrusel</b>
                         <br>
@@ -2469,7 +2345,7 @@ method: 'GET'
 
                         <b>Home Brazo</b><br>
                         <button type="button" class="btn btn-xs btn-default btn-homebrazo" style="margin: 4px 0;">Home Brazo</button>
-               
+
                         <br><br>
                         <br>
 
@@ -2477,7 +2353,7 @@ method: 'GET'
 
                         <b>Home Carrusel</b><br>
                         <button type="button" class="btn btn-xs btn-default btn-homecarrusel" style="margin: 4px 0;">Home Carrusel</button>
-               
+
                         <br><br>
                         <br>
 
@@ -2503,14 +2379,14 @@ method: 'GET'
                             <option value="17">17</option>
                             <option value="18">18</option>
                           </select>
-                          <button type="button" class="btn btn-xs btn-default btn-rotarcarrusel" style="margin: 4px 0;">Rotar a esta posición</button>
+                        <button type="button" class="btn btn-xs btn-default btn-rotarcarrusel" style="margin: 4px 0;">Rotar a esta posición</button>
 
-                          <br><br>
-                          <br>
-  
-  
-                          <b>Cambiar Herramienta</b><br>
-                          <select id="herramienta">
+                        <br><br>
+                        <br>
+
+
+                        <b>Cambiar Herramienta</b><br>
+                        <select id="herramienta">
                               <option value="1">1</option>
                               <option value="2">2</option>
                               <option value="3">3</option>
@@ -2530,29 +2406,29 @@ method: 'GET'
                               <option value="17">17</option>
                               <option value="18">18</option>
                             </select>
-                            <button type="button" class="btn btn-xs btn-default btn-cambiarh" style="margin: 4px 0;">Cambiar Herramienta</button>
-  
+                        <button type="button" class="btn btn-xs btn-default btn-cambiarh" style="margin: 4px 0;">Cambiar Herramienta</button>
+
                     </div>
 
 
-        </div>
-    </div>
-
-</div>
-
-
-
-
-
-            </div> 
-
-                <!-- Tab 3 -->
-     
-
+                </div>
             </div>
 
+        </div>
 
-            <!-- INICIO CODIGO EXISTENTE -->
 
-</div>
+
+
+
+    </div>
+
+    <!-- Tab 3 -->
+
+
+    </div>
+
+
+    <!-- INICIO CODIGO EXISTENTE -->
+
+    </div>
 </body>
