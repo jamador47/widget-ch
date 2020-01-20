@@ -1085,6 +1085,11 @@
 
                         var url = "http://192.168.0.98/actualizarh/";
 
+                        var url2 = "http://192.168.0.98/actualizarher/";
+
+                        url2 = url2.concat(document.getElementById("herramientaenhusillo").value);
+
+
                         url = url.concat(document.getElementById("herramientah1").value);
                         url = url.concat("&");
 
@@ -1214,6 +1219,10 @@
                         client.get(url, function(response) {
                             alert("valores guardados");
                         });
+
+                        client = new HttpClient();
+                        client.get(url2, function(response) {});
+
 
                     });
 
@@ -1643,6 +1652,39 @@
                     <div style="text-align:right"><input type="checkbox" id="modoh" value="1"> Modo Seguir Herramienta </div><br>
 
                     <table style="width:100%">
+
+
+
+                        <tr>
+                            <th><b>Herramienta en husillo</b></th>
+
+                        </tr>
+                        <tr>
+                            <td>Herramienta</td>
+                            <td><select class="form-control" name="herramientaenhusillo" id="herramientaenhusillo">
+                                <option value="0" selected="selected">Ninguna</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                              </select></td>
+                        </tr>
+
+
                         <tr>
                             <th><b>Pocket 1</b></th>
 
